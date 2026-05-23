@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0" />
+
+  <title>Warehouse WMS</title>
+
+  <link rel="stylesheet"
+    href="index.css" />
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+      <h2>SmartLog</h2>
+
+      <ul>
+
+        <!-- DASHBOARD -->
+
+        <li onclick="showPage('dashboard-page')">
+
+          <i class="fa-solid fa-chart-line"></i>
+
+          Dashboard
+
+        </li>
+
+        <!-- INBOUND -->
+
+        <li onclick="toggleMenu('inbound-menu')">
+
+          <i class="fa-solid fa-truck-ramp-box"></i>
+
+          Inbound
+
+        </li>
+
+        <ul id="inbound-menu"
+          class="submenu hidden">
+
+          <li onclick="showPage('po-page')">
+            PO Search
+          </li>
+
+        </ul>
+
+        <!-- INVENTORY -->
+
+        <li onclick="toggleMenu('inventory-menu')">
+
+          <i class="fa-solid fa-warehouse"></i>
+
+          Inventory
+
+        </li>
+
+        <ul id="inventory-menu"
+          class="submenu hidden">
+
+          <li onclick="showPage('sku-page')">
+            SKU Master
+          </li>
+
+          <li onclick="showPage('location-page')">
+            Location Master
+          </li>
+
+        </ul>
+
+        <!-- OUTBOUND -->
+
+        <li onclick="toggleMenu('outbound-menu')">
+
+          <i class="fa-solid fa-truck-fast"></i>
+
+          Outbound
+
+        </li>
+
+        <ul id="outbound-menu"
+          class="submenu hidden">
+
+          <li onclick="showPage('dn-page')">
+            Delivery Note
+          </li>
+
+        </ul>
+
+      </ul>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+      <div class="topbar">
+
+        <h3>Warehouse Management System</h3>
+
+      </div>
+
+      <div class="content">
+
+        <!-- DASHBOARD -->
+
+        <div id="dashboard-page"
+          class="page">
+
+          <h1>Dashboard</h1>
+
+        </div>
+
+        <!-- PO PAGE -->
+
+        <div id="po-page"
+          class="page hidden">
+
+          <h1>PO Search</h1>
+
+          <div class="table-toolbar">
+
+            <button onclick="toggleTableEdit('po-table')">
+              Edit
+            </button>
+
+            <button onclick="saveTableEdit('po-table')">
+              Save
+            </button>
+
+            <button onclick="deleteSelectedRows('po-table')">
+              Delete
+            </button>
+
+            <button onclick="addPoRow()">
+              Add
+            </button>
+
+          </div>
+
+          <table id="po-table">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  <input
+                    type="checkbox"
+                    onclick="toggleSelectAll(this,'po-table')"
+                  />
+                </th>
+
+                <th>Inbound Date</th>
+                <th>PO Number</th>
+                <th>Quantity</th>
+                <th>Product Name</th>
+                <th>Finalize Date</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="po-tbody">
+
+            </tbody>
+
+          </table>
+
+          <div class="pagination"
+            id="po-pagination">
+
+          </div>
+
+        </div>
+
+        <!-- SKU PAGE -->
+
+        <div id="sku-page"
+          class="page hidden">
+
+          <h1>SKU Master</h1>
+
+          <div class="table-toolbar">
+
+            <button onclick="toggleTableEdit('sku-table')">
+              Edit
+            </button>
+
+            <button onclick="saveTableEdit('sku-table')">
+              Save
+            </button>
+
+            <button onclick="deleteSelectedRows('sku-table')">
+              Delete
+            </button>
+
+            <button onclick="addSkuRow()">
+              Add
+            </button>
+
+          </div>
+
+          <table id="sku-table">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  <input
+                    type="checkbox"
+                    onclick="toggleSelectAll(this,'sku-table')"
+                  />
+                </th>
+
+                <th>SKU Number</th>
+                <th>SKU Name</th>
+                <th>Long</th>
+                <th>Width</th>
+                <th>Height</th>
+                <th>UOM</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="sku-tbody">
+
+            </tbody>
+
+          </table>
+
+          <div class="pagination"
+            id="sku-pagination">
+
+          </div>
+
+        </div>
+
+        <!-- LOCATION PAGE -->
+
+        <div id="location-page"
+          class="page hidden">
+
+          <h1>Location Master</h1>
+
+          <div class="table-toolbar">
+
+            <button onclick="toggleTableEdit('location-table')">
+              Edit
+            </button>
+
+            <button onclick="saveTableEdit('location-table')">
+              Save
+            </button>
+
+            <button onclick="deleteSelectedRows('location-table')">
+              Delete
+            </button>
+
+            <button onclick="addLocationRow()">
+              Add
+            </button>
+
+          </div>
+
+          <table id="location-table">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  <input
+                    type="checkbox"
+                    onclick="toggleSelectAll(this,'location-table')"
+                  />
+                </th>
+
+                <th>Location Name</th>
+                <th>Location Type</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="location-tbody">
+
+            </tbody>
+
+          </table>
+
+          <div class="pagination"
+            id="location-pagination">
+
+          </div>
+
+        </div>
+
+        <!-- DN PAGE -->
+
+        <div id="dn-page"
+          class="page hidden">
+
+          <h1>Delivery Note</h1>
+
+          <div class="table-toolbar">
+
+            <button onclick="toggleTableEdit('dn-table')">
+              Edit
+            </button>
+
+            <button onclick="saveTableEdit('dn-table')">
+              Save
+            </button>
+
+            <button onclick="deleteSelectedRows('dn-table')">
+              Delete
+            </button>
+
+            <button onclick="addDnRow()">
+              Add
+            </button>
+
+          </div>
+
+          <table id="dn-table">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  <input
+                    type="checkbox"
+                    onclick="toggleSelectAll(this,'dn-table')"
+                  />
+                </th>
+
+                <th>Outbound Date</th>
+                <th>DN Number</th>
+                <th>Quantity</th>
+                <th>Product Name</th>
+                <th>Delivery Address</th>
+                <th>Store Name</th>
+                <th>Finalize Date</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="dn-tbody">
+
+            </tbody>
+
+          </table>
+
+          <div class="pagination"
+            id="dn-pagination">
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="../JS/common.js"></script>
+  <script src="../JS/po.js"></script>
+  <script src="../JS/inventory.js"></script>
+  <script src="../JS/outbound.js"></script>
+  <script src="../JS/report.js"></script>
+
+</body>
+
+</html>

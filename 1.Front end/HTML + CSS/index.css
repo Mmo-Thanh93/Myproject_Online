@@ -1,0 +1,235 @@
+* {
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+body {
+
+  font-family: Arial;
+
+  background: #f4f6f9;
+}
+
+.app {
+
+  display: flex;
+
+  height: 100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+
+  width: 250px;
+
+  background: #1f3b63;
+
+  color: white;
+
+  padding: 20px;
+}
+
+.sidebar h2 {
+
+  margin-bottom: 30px;
+}
+
+.sidebar ul {
+
+  list-style: none;
+}
+
+.sidebar li {
+
+  padding: 14px 0;
+
+  cursor: pointer;
+
+  display: flex;
+
+  gap: 12px;
+
+  align-items: center;
+}
+
+.sidebar li:hover {
+
+  color: #4fc3f7;
+}
+
+.sidebar i {
+
+  color: #4fc3f7;
+}
+
+.submenu {
+
+  margin-left: 30px;
+}
+
+.hidden {
+
+  display: none;
+}
+
+/* MAIN */
+
+.main {
+
+  flex: 1;
+
+  padding: 20px;
+}
+
+.page {
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 12px;
+}
+
+/* TABLE */
+
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  margin-top: 20px;
+}
+
+th {
+
+  background: #e8edf3;
+
+  padding: 14px;
+
+  text-align: left;
+}
+
+td {
+
+  padding: 14px;
+
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+
+  background: #f5f9fc;
+}
+
+/* TOOLBAR */
+
+.table-toolbar {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.table-toolbar button {
+
+  background: #1f3b63;
+
+  color: white;
+
+  border: none;
+
+  padding: 10px 18px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.table-toolbar button:hover {
+
+  background: #2c5288;
+}
+
+/* EDITABLE */
+
+.editable-cell {
+
+  background: #edf7ff;
+}
+
+.editable-cell:focus {
+
+  outline: none;
+
+  background: #cfeaff;
+}
+
+/* CHECKBOX */
+
+.checkbox-cell {
+
+  width: 40px;
+
+  text-align: center;
+}
+
+/* NEW ROW */
+
+.new-row {
+
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+  0% {
+    background: #fff9c4;
+  }
+
+  50% {
+    background: white;
+  }
+
+  100% {
+    background: #fff9c4;
+  }
+}
+
+/* PAGINATION */
+
+.pagination {
+
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 20px;
+}
+
+.pagination button {
+
+  border: none;
+
+  background: #e8edf3;
+
+  padding: 8px 14px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+.pagination button.active {
+
+  background: #1f3b63;
+
+  color: white;
+}
