@@ -8,7 +8,7 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0" />
 
-  <title>Warehouse WMS New Project</title>
+  <title>WMS New Project</title>
 
   <link rel="stylesheet"
     href="./1.Front end/CSS/index.css" />
@@ -22,7 +22,73 @@
 
 <body>
 
-  <div class="app">
+  <div id="login-page"
+    class="login-page">
+
+    <div class="login-illustration">
+
+      <div class="login-circle">
+
+        <i class="fa-solid fa-user-lock"></i>
+
+      </div>
+
+    </div>
+
+    <form class="login-panel"
+      onsubmit="loginUser(event)">
+
+      <label for="login-username">
+        User
+      </label>
+
+      <input
+        type="text"
+        id="login-username"
+        autocomplete="username"
+      />
+
+      <label for="login-password">
+        Password
+      </label>
+
+      <input
+        type="password"
+        id="login-password"
+        autocomplete="current-password"
+      />
+
+      <label class="show-password">
+
+        <input
+          type="checkbox"
+          onchange="toggleLoginPassword(this)"
+        />
+
+        Show
+
+      </label>
+
+      <div class="login-actions">
+
+        <button type="submit">
+          Log In
+        </button>
+
+        <button
+          type="button"
+          onclick="showMessageBox('Forgot password','Please contact system admin.','info')">
+          Forget Password
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+  <div id="app-root"
+    class="app hidden">
 
     <!-- SIDEBAR -->
 
@@ -119,6 +185,16 @@
 
         <h3>Warehouse Management System</h3>
 
+        <div class="user-area">
+
+          <span id="current-user-label"></span>
+
+          <button onclick="logoutUser()">
+            Log Out
+          </button>
+
+        </div>
+
       </div>
 
       <div class="content">
@@ -157,6 +233,31 @@
               Add
             </button>
 
+            <button
+              class="csv-button"
+              onclick="downloadCsvTemplate('po-table')">
+              Download Template
+            </button>
+
+            <button
+              class="csv-button"
+              onclick="triggerCsvUpload('po-table')">
+              Upload CSV
+            </button>
+
+            <input
+              type="file"
+              id="po-table-csv"
+              class="hidden-file-input"
+              accept=".csv,text/csv"
+              onchange="uploadCsvFile(event,'po-table')"
+            />
+
+            <div class="pagination toolbar-pagination"
+              id="po-pagination">
+
+            </div>
+
           </div>
 
           <table id="po-table">
@@ -188,11 +289,6 @@
 
           </table>
 
-          <div class="pagination"
-            id="po-pagination">
-
-          </div>
-
         </div>
 
         <!-- SKU PAGE -->
@@ -219,6 +315,31 @@
             <button onclick="addSkuRow()">
               Add
             </button>
+
+            <button
+              class="csv-button"
+              onclick="downloadCsvTemplate('sku-table')">
+              Download Template
+            </button>
+
+            <button
+              class="csv-button"
+              onclick="triggerCsvUpload('sku-table')">
+              Upload CSV
+            </button>
+
+            <input
+              type="file"
+              id="sku-table-csv"
+              class="hidden-file-input"
+              accept=".csv,text/csv"
+              onchange="uploadCsvFile(event,'sku-table')"
+            />
+
+            <div class="pagination toolbar-pagination"
+              id="sku-pagination">
+
+            </div>
 
           </div>
 
@@ -252,11 +373,6 @@
 
           </table>
 
-          <div class="pagination"
-            id="sku-pagination">
-
-          </div>
-
         </div>
 
         <!-- INVENTORY PAGE -->
@@ -271,6 +387,11 @@
             <button onclick="loadTableFromSupabase('inventory-table')">
               Refresh
             </button>
+
+            <div class="pagination toolbar-pagination"
+              id="inventory-pagination">
+
+            </div>
 
           </div>
 
@@ -295,11 +416,6 @@
             </tbody>
 
           </table>
-
-          <div class="pagination"
-            id="inventory-pagination">
-
-          </div>
 
         </div>
 
@@ -327,6 +443,31 @@
             <button onclick="addLocationRow()">
               Add
             </button>
+
+            <button
+              class="csv-button"
+              onclick="downloadCsvTemplate('location-table')">
+              Download Template
+            </button>
+
+            <button
+              class="csv-button"
+              onclick="triggerCsvUpload('location-table')">
+              Upload CSV
+            </button>
+
+            <input
+              type="file"
+              id="location-table-csv"
+              class="hidden-file-input"
+              accept=".csv,text/csv"
+              onchange="uploadCsvFile(event,'location-table')"
+            />
+
+            <div class="pagination toolbar-pagination"
+              id="location-pagination">
+
+            </div>
 
           </div>
 
@@ -356,11 +497,6 @@
 
           </table>
 
-          <div class="pagination"
-            id="location-pagination">
-
-          </div>
-
         </div>
 
         <!-- DN PAGE -->
@@ -387,6 +523,31 @@
             <button onclick="addDnRow()">
               Add
             </button>
+
+            <button
+              class="csv-button"
+              onclick="downloadCsvTemplate('dn-table')">
+              Download Template
+            </button>
+
+            <button
+              class="csv-button"
+              onclick="triggerCsvUpload('dn-table')">
+              Upload CSV
+            </button>
+
+            <input
+              type="file"
+              id="dn-table-csv"
+              class="hidden-file-input"
+              accept=".csv,text/csv"
+              onchange="uploadCsvFile(event,'dn-table')"
+            />
+
+            <div class="pagination toolbar-pagination"
+              id="dn-pagination">
+
+            </div>
 
           </div>
 
@@ -420,11 +581,6 @@
             </tbody>
 
           </table>
-
-          <div class="pagination"
-            id="dn-pagination">
-
-          </div>
 
         </div>
 

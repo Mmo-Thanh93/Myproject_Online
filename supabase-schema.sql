@@ -1,4 +1,7 @@
-create extension if not exists "pgcrypto";
+create schema if not exists extensions;
+
+create extension if not exists "pgcrypto"
+with schema extensions;
 
 create table if not exists public.skus (
   id uuid primary key default gen_random_uuid(),
@@ -43,6 +46,65 @@ create table if not exists public.delivery_notes (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+create table if not exists public.app_users (
+  id uuid primary key default gen_random_uuid(),
+  username text not null unique,
+  password_hash text not null,
+  role text not null default 'viewer',
+  can_edit boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+insert into public.app_users (
+  username,
+  password_hash,
+  role,
+  can_edit
+) values (
+  'MrOh',
+  extensions.crypt(
+    'Thanhdo',
+    extensions.gen_salt('bf')
+  ),
+  'admin',
+  true
+)
+on conflict (username) do update set
+  password_hash = excluded.password_hash,
+  role = excluded.role,
+  can_edit = excluded.can_edit,
+  updated_at = now();
+
+create or replace function public.login_app_user(
+  p_username text,
+  p_password text
+)
+returns table (
+  username text,
+  role text,
+  can_edit boolean
+)
+security definer
+set search_path = public
+language sql
+as $$
+  select
+    app_users.username,
+    app_users.role,
+    app_users.can_edit
+  from public.app_users
+  where app_users.username = p_username
+    and app_users.password_hash = extensions.crypt(
+      p_password,
+      app_users.password_hash
+    )
+  limit 1;
+$$;
+
+revoke all on function public.login_app_user(text,text) from public;
+grant execute on function public.login_app_user(text,text) to anon;
 
 create or replace view public.inventory_stock as
 with inbound as (
@@ -99,10 +161,16 @@ create trigger set_delivery_notes_updated_at
 before update on public.delivery_notes
 for each row execute function public.set_updated_at();
 
+drop trigger if exists set_app_users_updated_at on public.app_users;
+create trigger set_app_users_updated_at
+before update on public.app_users
+for each row execute function public.set_updated_at();
+
 alter table public.skus enable row level security;
 alter table public.locations enable row level security;
 alter table public.purchase_orders enable row level security;
 alter table public.delivery_notes enable row level security;
+alter table public.app_users enable row level security;
 
 drop policy if exists "Allow public write skus" on public.skus;
 create policy "Allow public write skus"

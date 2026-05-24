@@ -15,7 +15,3 @@ function addPoRow() {
     "po-pagination"
   )
 }
-
-loadTableFromSupabase(
-  "po-table"
-)

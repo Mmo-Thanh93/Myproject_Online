@@ -20,10 +20,6 @@ function addSkuRow() {
   )
 }
 
-loadTableFromSupabase(
-  "sku-table"
-)
-
 // ========================
 // LOCATION
 // ========================
@@ -45,7 +41,3 @@ function addLocationRow() {
     "location-pagination"
   )
 }
-
-loadTableFromSupabase(
-  "location-table"
-)

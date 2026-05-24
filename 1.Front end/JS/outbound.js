@@ -15,7 +15,3 @@ function addDnRow() {
     "dn-pagination"
   )
 }
-
-loadTableFromSupabase(
-  "dn-table"
-)
