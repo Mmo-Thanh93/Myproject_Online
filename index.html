@@ -78,6 +78,10 @@
             SKU Master
           </li>
 
+          <li onclick="showPage('inventory-page'); loadTableFromSupabase('inventory-table')">
+            Inventory Balance
+          </li>
+
           <li onclick="showPage('location-page')">
             Location Master
           </li>
@@ -255,6 +259,50 @@
 
         </div>
 
+        <!-- INVENTORY PAGE -->
+
+        <div id="inventory-page"
+          class="page hidden">
+
+          <h1>Inventory Balance</h1>
+
+          <div class="table-toolbar">
+
+            <button onclick="loadTableFromSupabase('inventory-table')">
+              Refresh
+            </button>
+
+          </div>
+
+          <table id="inventory-table">
+
+            <thead>
+
+              <tr>
+
+                <th></th>
+                <th>Product Name</th>
+                <th>Total Inbound</th>
+                <th>Total Outbound</th>
+                <th>Stock Quantity</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="inventory-tbody">
+
+            </tbody>
+
+          </table>
+
+          <div class="pagination"
+            id="inventory-pagination">
+
+          </div>
+
+        </div>
+
         <!-- LOCATION PAGE -->
 
         <div id="location-page"
@@ -386,6 +434,8 @@
 
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./1.Front end/JS/supabase-config.js"></script>
   <script src="./1.Front end/JS/common.js"></script>
   <script src="./1.Front end/JS/po.js"></script>
   <script src="./1.Front end/JS/inventory.js"></script>

@@ -172,6 +172,21 @@ tr:hover {
   background: #cfeaff;
 }
 
+.date-input {
+
+  width: 100%;
+
+  border: 1px solid #b8c7d9;
+
+  border-radius: 6px;
+
+  padding: 8px;
+
+  font: inherit;
+
+  background: white;
+}
+
 /* CHECKBOX */
 
 .checkbox-cell {
