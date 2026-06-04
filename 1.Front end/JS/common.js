@@ -67,6 +67,9 @@ const tableConfigs = {
     requiredColumns: [
       "po_number"
     ],
+    numberColumns: [
+      "quantity"
+    ],
     columns: [
       "inbound_date",
       "po_number",
@@ -85,6 +88,11 @@ const tableConfigs = {
     ],
     uniqueColumns: [
       "sku_number"
+    ],
+    numberColumns: [
+      "length",
+      "width",
+      "height"
     ],
     columns: [
       "sku_number",
@@ -130,6 +138,9 @@ const tableConfigs = {
     ],
     requiredColumns: [
       "dn_number"
+    ],
+    numberColumns: [
+      "quantity"
     ],
     columns: [
       "outbound_date",
@@ -345,6 +356,16 @@ function isDateColumn(
     config.dateColumns.includes(column)
 }
 
+function isNumberColumn(
+  config,
+  column
+) {
+
+  return config &&
+    config.numberColumns &&
+    config.numberColumns.includes(column)
+}
+
 function showMessageBox(
   title,
   message,
@@ -472,7 +493,11 @@ function getRowData(
         : cells[index + 1].innerText.trim()
 
     data[column] =
-      value === "" ? null : value
+      normalizeTableValue(
+        config,
+        column,
+        value
+      )
   })
 
   if (row.dataset.id) {
@@ -488,6 +513,71 @@ function normalizeUniqueValue(value) {
   return String(value ?? "")
     .trim()
     .toLowerCase()
+}
+
+function normalizeNumberValue(
+  value,
+  column
+) {
+
+  if (value === "") {
+
+    return null
+  }
+
+  const normalized =
+    String(value)
+      .trim()
+      .replaceAll(",", "")
+
+  if (!/^-?\d+(\.\d+)?$/.test(normalized)) {
+
+    throw new Error(
+      `Invalid number for ${column}: ${value}`
+    )
+  }
+
+  return Number(normalized)
+}
+
+function normalizeTableValue(
+  config,
+  column,
+  value
+) {
+
+  const trimmed =
+    String(value ?? "").trim()
+
+  if (trimmed === "") {
+
+    return null
+  }
+
+  if (
+    isDateColumn(
+      config,
+      column
+    )
+  ) {
+
+    return normalizeDateValue(trimmed)
+  }
+
+  if (
+    isNumberColumn(
+      config,
+      column
+    )
+  ) {
+
+    return normalizeNumberValue(
+      trimmed,
+      column
+    )
+  }
+
+  return trimmed
 }
 
 async function validateUniqueItems(
@@ -732,19 +822,33 @@ async function saveTableEdit(tableId) {
         table.querySelectorAll("tbody tr")
       )
 
-    const payload =
-      rows
-        .map(row => getRowData(
-          row,
-          config
-        ))
-        .filter(item => {
+    let payload
 
-          return config.columns.some(column => {
+    try {
 
-            return item[column] !== null
+      payload =
+        rows
+          .map(row => getRowData(
+            row,
+            config
+          ))
+          .filter(item => {
+
+            return config.columns.some(column => {
+
+              return item[column] !== null
+            })
           })
-        })
+    } catch (error) {
+
+      showMessageBox(
+        "Invalid data",
+        error.message,
+        "error"
+      )
+
+      return
+    }
 
     const invalidItem =
       payload.find(item => {
@@ -785,20 +889,52 @@ async function saveTableEdit(tableId) {
         return
       }
 
-      const { error } =
-        await client
-          .from(config.tableName)
-          .upsert(payload)
+      const newItems =
+        payload.filter(item => !item.id)
 
-      if (error) {
+      const existingItems =
+        payload.filter(item => item.id)
 
-        showMessageBox(
-          "Save failed",
-          error.message,
-          "error"
-        )
+      if (newItems.length > 0) {
 
-        throw error
+        const { error } =
+          await client
+            .from(config.tableName)
+            .insert(newItems)
+
+        if (error) {
+
+          showMessageBox(
+            "Save failed",
+            error.message,
+            "error"
+          )
+
+          throw error
+        }
+      }
+
+      for (const item of existingItems) {
+
+        const { id, ...changes } =
+          item
+
+        const { error } =
+          await client
+            .from(config.tableName)
+            .update(changes)
+            .eq("id", id)
+
+        if (error) {
+
+          showMessageBox(
+            "Save failed",
+            error.message,
+            "error"
+          )
+
+          throw error
+        }
       }
     }
   }
